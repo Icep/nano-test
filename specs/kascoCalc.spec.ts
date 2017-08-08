@@ -2,7 +2,7 @@ import { browser, ExpectedConditions as EC, $, $$ } from 'protractor'
 import { KascoCalc } from '../page_objects/kascoCalc.page'
 import { KascoResult } from '../page_objects/kascoresult.page'
 
-declare let expect: any
+//declare let expect: any
 
 describe('Casco calculator test -', function () {
     let kascoCalc = new KascoCalc()
@@ -31,12 +31,12 @@ describe('Casco calculator test -', function () {
         await kascoCalc.showPrice()
         await browser.wait(EC.visibilityOf(kascoResult.infoCard.first()), 5000)
 
-        expect(await kascoResult.companyName.get(0).getText()).toContain(test_1.company)
-        expect(await kascoResult.price.get(0).getText()).toContain(test_1.price)
-        expect(await kascoResult.companyName.get(1).getText()).toContain(test_2.company)
-        expect(await kascoResult.price.get(1).getText()).toContain(test_2.price)
-        expect(await kascoResult.companyName.get(2).getText()).toContain(test_3.company)
-        expect(await kascoResult.price.get(2).getText()).toContain(test_3.price)
+        expect(await kascoResult.companyName.get(0).getText()).toContain(test_1.company, "Company not in the list")
+        expect(await kascoResult.price.get(0).getText()).toContain(test_1.price, "The price is not fits filters and company")
+        expect(await kascoResult.companyName.get(1).getText()).toContain(test_2.company, "Company not in the list")
+        expect(await kascoResult.price.get(1).getText()).toContain(test_2.price, "The price is not fits filters and company")
+        expect(await kascoResult.companyName.get(2).getText()).toContain(test_3.company, "Company not in the list")
+        expect(await kascoResult.price.get(2).getText()).toContain(test_3.price, "The price is not fits filters and company")
     })
     it('Sort by price check', async function () {
         await kascoCalc.selectAutoBrand('Audi')
@@ -76,8 +76,9 @@ describe('Casco calculator test -', function () {
         await kascoResult.sortCompareASC(kascoResult.franchise)
         await kascoResult.sortFranchiseDESC()
         await kascoResult.sortCompareDESC(kascoResult.franchise)
+
     })
-    xit('Sort by Rating check', async function () {
+    fit('Sort by Rating check', async function () {
         await kascoCalc.selectAutoBrand('Audi')
         await kascoCalc.selectAutoModel('A3')
         await kascoCalc.selectCityreg('Хмельницкий')
@@ -91,13 +92,14 @@ describe('Casco calculator test -', function () {
         await kascoCalc.showPrice()
         await browser.wait(EC.visibilityOf(kascoResult.infoCard.first()), 5000)
 
-       
-        await console.log(kascoResult.activeRatingStars.count())
-        expect(await (kascoResult.activeRatingStars).count()).toEqual(10)
-       /* await kascoResult.getRating(0)
-        await kascoResult.getRating(1)
-        await kascoResult.getRating(2)*/
-      
+        await kascoResult.sortRating()
+
+        var sorted = [], unSorted = []
+        await unSorted.push((kascoResult.rating_1).count(), (kascoResult.rating_2).count(), (kascoResult.rating_3).count())
+        var sorted = unSorted.slice()
+        sorted = sorted.sort()
+        expect(await sorted).toEqual(unSorted, "Sorting by Rating is Failed")
+
     })
     afterAll(() => {
 

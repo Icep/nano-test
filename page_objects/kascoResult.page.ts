@@ -14,6 +14,9 @@ export class KascoResult extends BasePage {
     public price = $$('.result-price')
     public resultRating = $$('.result-rating')
     public activeRatingStars = $$('.result-rating .active')
+    public rating_1 = element.all(By.xpath('//*[contains(@class,"info-part")][1]//*[contains(@class,"result-rating")]/span[@class="active"]'))
+    public rating_2 = element.all(By.xpath('//*[contains(@class,"info-part")][2]//*[contains(@class,"result-rating")]/span[@class="active"]'))
+    public rating_3 = element.all(By.xpath('//*[contains(@class,"info-part")][3]//*[contains(@class,"result-rating")]/span[@class="active"]'))
     public franchise = $$('[id~="single-button-sum-"]')
 
     async sortPriceASC() {
@@ -40,30 +43,40 @@ export class KascoResult extends BasePage {
         var sorted = [], unSorted = []
         await ele.map(async function (eachName) {
             return await eachName.getText().then(async function (unSorted) {
+                await console.log(unSorted)
                 return await unSorted;
             });
         }).then(async function (unSorted) {
             var sorted = unSorted.slice()
             sorted = sorted.sort()
-            expect(await sorted).toEqual(unSorted)
+            expect(await sorted).toEqual(unSorted, "Sorting is Failed" + ele)
         });
     }
     async sortCompareDESC(ele) {
         var sorted = [], unSorted = []
         await ele.map(async function (eachName) {
             return await eachName.getText().then(async function (unSorted) {
+                await console.log(unSorted)
                 return await unSorted;
             });
         }).then(async function (unSorted) {
             var sorted = unSorted.slice()
             sorted = sorted.sort()
             sorted = sorted.reverse()
-            expect(await sorted).toEqual(unSorted)
+            expect(await sorted).toEqual(unSorted, "Sorting is Failed" + ele)
         });
     }
-    async getRating_1(){
-        await  console.log(this.activeRatingStars.count())
-        return await this.activeRatingStars.count()
+    async getRating(elem) {
+        return await elem.count()
+    }
+    async sortRatingCompare() {
+        var sorted = [], unSorted = []
+        unSorted.push((this.rating_1).count(), (this.rating_2).count(), (this.rating_3).count())
+
+        var sorted = unSorted.slice()
+        sorted = sorted.sort()
+        expect(await sorted).toEqual(unSorted, "Sorting by rating is Failed")
+
     }
 
 }
