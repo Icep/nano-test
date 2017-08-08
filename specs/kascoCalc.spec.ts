@@ -78,7 +78,7 @@ describe('Casco calculator test -', function () {
         await kascoResult.sortCompareDESC(kascoResult.franchise)
 
     })
-    fit('Sort by Rating check', async function () {
+    it('Sort by Rating check', async function () {
         await kascoCalc.selectAutoBrand('Audi')
         await kascoCalc.selectAutoModel('A3')
         await kascoCalc.selectCityreg('Хмельницкий')
